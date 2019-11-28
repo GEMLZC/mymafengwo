@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.hotel.mapper.DestinationAreaMapper">
+  <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.hotel.domain.DestinationArea">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
+    <result column="rate3_price" jdbcType="BIGINT" property="rate3Price" />
+    <result column="rate4_price" jdbcType="BIGINT" property="rate4Price" />
+    <result column="rate5_price" jdbcType="BIGINT" property="rate5Price" />
+    <result column="hotelsum" property="hotelsum"/>
+    <result column="choosepercent" property="choosepercent"/>
+    <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result property="name" column="name"/>
+    </association>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from destination_area
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.wolfcode.luowowo.hotel.domain.DestinationArea" useGeneratedKeys="true">
+    insert into destination_area (dest_id, name, info, 
+      rate3_price, rate4_price, rate5_price
+      )
+    values (#{dest.id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{info,jdbcType=VARCHAR}, 
+      #{rate3Price,jdbcType=BIGINT}, #{rate4Price,jdbcType=BIGINT}, #{rate5Price,jdbcType=BIGINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.wolfcode.luowowo.hotel.domain.DestinationArea">
+    update destination_area
+    set dest_id = #{dest.id,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      info = #{info,jdbcType=VARCHAR},
+      rate3_price = #{rate3Price,jdbcType=BIGINT},
+      rate4_price = #{rate4Price,jdbcType=BIGINT},
+      rate5_price = #{rate5Price,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+   <include refid="base_column"/>
+    where da.id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+   <include refid="base_column"/>
+  </select>
+  <select id="selectAreaByDestId" resultMap="BaseResultMap">
+    <include refid="base_column"/>
+    where d.id =#{destId}
+  </select>
+  <sql id="base_column">
+    select da.id,  da.name, da.info, da.rate3_price, da.rate4_price, da.rate5_price,da.hotelsum,da.choosepercent,
+    d.id d_id,d.name d_name
+    from destination_area da
+    left join destination d on da.dest_id=d.id
+  </sql>
+</mapper>

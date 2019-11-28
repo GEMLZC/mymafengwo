@@ -1,0 +1,117 @@
+.wrapper {
+  font-size: 14px;
+  line-height: 24px;
+  color: #666;
+}
+.qt-sider {
+  width: 252px;
+  padding-top: 82px;
+  padding-right: 28px;
+  float: right;
+}
+
+.qt-sider .qts-tit {
+  font-size: 18px;
+  line-height: 30px;
+  margin-bottom: 20px;
+}
+
+.qt-sider p {
+  margin-bottom: 24px;
+  color: #999;
+}
+
+.qt-main {
+  width: 660px;
+  float: left;
+}
+
+.crumb {
+  height: 24px;
+  padding: 25px 0 27px;
+}
+
+.qt-tit {
+  margin-bottom: 24px;
+}
+
+.qt-tit input {
+  display: block;
+  width: 628px;
+  height: 30px;
+  padding: 6px 15px;
+  border: 1px solid #e5e5e5;
+  color: #999;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-size: 14px;
+  -webkit-transition: all .2s;
+  transition: all .2s;
+}
+
+.qt-tit .count {
+  padding-right: 12px;
+  color: #999;
+}
+
+.hide {
+  display: none;
+}
+
+.qt-tit .error {
+  font-size: 12px;
+  color: #ef523d;
+}
+
+.qt-container {
+  width: 1000px;
+  margin: 0 auto;
+  padding-bottom: 80px;
+}
+
+.qt-main h5 {
+  height: 30px;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 30px;
+  color: #333;
+}
+
+.qt-details h5 .icon, .add-pic i, .tags-add {
+  background: url(../images/mfwask-qt_v2.png) no-repeat;
+}
+
+.qt-details h5 .icon {
+  display: block;
+  float: left;
+  width: 28px;
+  height: 28px;
+  margin: 1px 10px 0 0;
+  background-position: 0 0;
+  transition: transform .5s;
+}
+
+.qt-details h5 .icon.active {
+  transform: rotate3d(0,0,1,45deg);
+}
+
+.qt-details h5 .icon:hover {
+  background-position: 0 -28px;
+}
+
+.qt-details h5 .icon.active {
+  transform: rotate3d(0,0,1,45deg);
+}
+
+.qt-post-btn {
+  display: inline-block;
+  width: 152px;
+  height: 40px;
+  background-color: #ff9d00;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  margin-top: 16px;
+}

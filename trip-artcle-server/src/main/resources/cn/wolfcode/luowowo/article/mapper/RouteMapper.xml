@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.RouteMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.Route">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="summary" jdbcType="VARCHAR" property="summary"/>
+        <result column="day" jdbcType="INTEGER" property="day"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM route
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.wolfcode.luowowo.article.domain.Route"
+            useGeneratedKeys="true">
+        INSERT INTO route (name, summary, day
+        )
+        VALUES (#{name,jdbcType=VARCHAR}, #{summary,jdbcType=VARCHAR}, #{day,jdbcType=INTEGER}
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.wolfcode.luowowo.article.domain.Route">
+        UPDATE route
+        SET name    = #{name,jdbcType=VARCHAR},
+            summary = #{summary,jdbcType=VARCHAR},
+            day     = #{day,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+            id,
+            name,
+            summary,
+            day
+        FROM route
+        WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            id,
+            name,
+            summary,
+            day
+        FROM route
+    </select>
+</mapper>

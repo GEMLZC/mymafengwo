@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.TravelMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.Travel">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="summary" jdbcType="VARCHAR" property="summary"/>
+        <result column="coverUrl" jdbcType="VARCHAR" property="coverUrl"/>
+        <result column="travelTime" jdbcType="TIMESTAMP" property="travelTime"/>
+        <result column="perExpends" jdbcType="INTEGER" property="perExpends"/>
+        <result column="days" jdbcType="INTEGER" property="days"/>
+        <result column="person" jdbcType="INTEGER" property="person"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="releaseTime" jdbcType="TIMESTAMP" property="releaseTime"/>
+        <result column="lastUpdateTime" jdbcType="TIMESTAMP" property="lastUpdateTime"/>
+        <result column="overt" jdbcType="INTEGER" property="overt"/>
+        <result column="viewnum" jdbcType="INTEGER" property="viewnum"/>
+        <result column="replynum" jdbcType="INTEGER" property="replynum"/>
+        <result column="favornum" jdbcType="INTEGER" property="favornum"/>
+        <result column="sharenum" jdbcType="INTEGER" property="sharenum"/>
+        <result column="thumbsupnum" jdbcType="INTEGER" property="thumbsupnum"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <association property="author" columnPrefix="u_" javaType="UserInfo">
+            <id column="id" property="id"/>
+            <result column="nickName" property="nickname"/>
+            <result column="headImgUrl" property="headImgUrl"/>
+        </association>
+        <association property="dest" javaType="Destination" columnPrefix="d_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="coverUrl" property="coverUrl"/>
+        </association>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM travel
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.wolfcode.luowowo.article.domain.Travel"
+            useGeneratedKeys="true">
+        INSERT INTO travel (dest_id, author_id, title,
+                            summary, coverUrl, travelTime,
+                            perExpends, days, person,
+                            createTime, releaseTime, lastUpdateTime,
+                            overt, viewnum, replynum,
+                            favornum, sharenum, thumbsupnum,
+                            state)
+        VALUES (#{dest.id,jdbcType=BIGINT}, #{author.id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR},
+                                            #{summary,jdbcType=VARCHAR}, #{coverUrl,jdbcType=VARCHAR},
+                                            #{travelTime,jdbcType=TIMESTAMP},
+                                            #{perExpends,jdbcType=INTEGER}, #{days,jdbcType=INTEGER},
+                                            #{person,jdbcType=INTEGER},
+                                            #{createTime,jdbcType=TIMESTAMP}, #{releaseTime,jdbcType=TIMESTAMP},
+                #{lastUpdateTime,jdbcType=TIMESTAMP},
+                #{overt,jdbcType=INTEGER}, #{viewnum,jdbcType=INTEGER}, #{replynum,jdbcType=INTEGER},
+                #{favornum,jdbcType=INTEGER}, #{sharenum,jdbcType=INTEGER}, #{thumbsupnum,jdbcType=INTEGER},
+                #{state,jdbcType=INTEGER})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.wolfcode.luowowo.article.domain.Travel">
+        UPDATE travel
+        SET dest_id        = #{dest.id,jdbcType=BIGINT},
+            author_id      = #{author.id,jdbcType=BIGINT},
+            title          = #{title,jdbcType=VARCHAR},
+            summary        = #{summary,jdbcType=VARCHAR},
+            coverUrl       = #{coverUrl,jdbcType=VARCHAR},
+            travelTime     = #{travelTime,jdbcType=TIMESTAMP},
+            perExpends     = #{perExpends,jdbcType=INTEGER},
+            days           = #{days,jdbcType=INTEGER},
+            person         = #{person,jdbcType=INTEGER},
+            lastUpdateTime = #{lastUpdateTime,jdbcType=TIMESTAMP},
+            overt          = #{overt,jdbcType=INTEGER},
+            state          = #{state,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+        WHERE t.id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+    </select>
+    <select id="selectForList" resultMap="BaseResultMap">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+        <where>
+            <if test="keyword != null">
+                and t.title LIKE concat('%',#{keyword} ,'%')
+            </if>
+            <if test="state != -1">
+            AND t.state = #{state}
+            </if>
+            <if test="authorId != -1">
+                AND t.author_id = #{authorId}
+            </if>
+            <if test="overt != null ">
+                AND t.overt = #{overt}
+            </if>
+            <if test="travelTimeType > -1">
+                AND month(t.travelTime) >= #{travelTime.min}
+                AND month(t.travelTime) &lt;= #{travelTime.max}
+
+            </if>
+            <if test="perExpendType > -1">
+                AND t.perExpends >= #{perExpend.min}
+                <if test="perExpend.max != null ">
+                    AND t.perExpends &lt;= #{perExpend.max}
+                </if>
+            </if>
+            <if test="dayType > -1">
+                AND t.days >= #{day.min}
+                <if test="day.max != null ">
+                    AND t.days &lt;= #{day.max}
+                </if>
+            </if>
+            <if test="destId != -1">
+                and t.dest_id = #{destId}
+            </if>
+        </where>
+    </select>
+
+    <sql id="base_column">
+        SELECT
+            t.id,
+            t.title,
+            t.summary,
+            t.coverUrl,
+            t.travelTime,
+            t.perExpends,
+            t.days,
+            t.person,
+            t.createTime,
+            t.releaseTime,
+            t.lastUpdateTime,
+            t.overt,
+            t.viewnum,
+            t.replynum,
+            t.favornum,
+            t.sharenum,
+            t.thumbsupnum,
+            t.state,
+            d.id         d_id,
+            d.`name`     d_name,
+            d.coverUrl d_coverUrl,
+            u.id         u_id,
+            u.nickName   u_nickName,
+            u.headImgUrl u_headImgUrl
+    </sql>
+    <sql id="base_result">
+        FROM travel t LEFT JOIN destination d ON t.dest_id = d.id
+            LEFT JOIN userinfo u ON t.author_id = u.id
+    </sql>
+    <update id="updateState">
+        UPDATE travel
+        SET state = #{state}
+        WHERE id = #{id}
+    </update>
+    <update id="addthumbsupnum">
+        UPDATE travel
+        SET thumbsupnum = thumbsupnum+1
+        WHERE id = #{travelId}
+    </update>
+    <select id="selectByDestId" resultMap="BaseResultMap">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+        <where>
+            <if test="destId != null">
+                and t.dest_id = #{destId}
+            </if>
+            <if test="orderBy != null">
+                ORDER BY #{orderBy}
+            </if>
+        </where>
+    </select>
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+        WHERE t.author_id=#{userId}
+
+    </select>
+
+    <update id="updateShareNum">
+        UPDATE travel
+        SET sharenum = sharenum+#{num}
+        WHERE id = #{travelId}
+    </update>
+    <select id="selectShareNumById" resultType="int">
+        select sharenum from travel WHERE id = #{id}
+    </select>
+</mapper>

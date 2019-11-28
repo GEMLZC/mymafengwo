@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.NewDestinationMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.NewDestination">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="parent_id" jdbcType="BIGINT" property="parent_id"/>
+        <result column="region_id" jdbcType="BIGINT" property="region_id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="hot" jdbcType="INTEGER" property="hot"/>
+        <result column="coverUrl" jdbcType="VARCHAR" property="coverUrl"/>
+        <result column="info" jdbcType="VARCHAR" property="info"/>
+        <result column="deep" jdbcType="INTEGER" property="deep"/>
+        <association property="quarter" columnPrefix="q_" javaType="Quarter">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <association property="tag" columnPrefix="d_" javaType="DestinationThemeTag">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <association property="route" columnPrefix="r_" javaType="Route">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="summary" property="summary"/>
+            <result column="day" property="day"/>
+        </association>
+    </resultMap>
+    <resultMap id="BaseResultMap2" type="cn.wolfcode.luowowo.article.domain.NewDestination">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="parent_id" jdbcType="BIGINT" property="parent_id"/>
+        <result column="region_id" jdbcType="BIGINT" property="region_id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="hot" jdbcType="INTEGER" property="hot"/>
+        <result column="coverUrl" jdbcType="VARCHAR" property="coverUrl"/>
+        <result column="info" jdbcType="VARCHAR" property="info"/>
+        <result column="deep" jdbcType="INTEGER" property="deep"/>
+        <association property="quarter" columnPrefix="q_" javaType="Quarter">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <association property="tag" columnPrefix="d_" javaType="DestinationThemeTag">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <association property="route" columnPrefix="r_" javaType="Route">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="summary" property="summary"/>
+            <result column="day" property="day"/>
+        </association>
+        <collection property="children" column="id" select="selectThreeDest"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM new_destination
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="cn.wolfcode.luowowo.article.domain.NewDestination" useGeneratedKeys="true">
+        INSERT INTO new_destination (parent_id, region_id, name,
+                                     hot, coverUrl, info,
+                                     monthd_id, tag_id, route_id,
+                                     deep)
+        VALUES (#{parent_id,jdbcType=BIGINT}, #{region_id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
+                #{hot,jdbcType=INTEGER}, #{coverUrl,jdbcType=VARCHAR}, #{info,jdbcType=VARCHAR},
+                #{quarter.id,jdbcType=BIGINT}, #{tag.id,jdbcType=BIGINT}, #{route.id,jdbcType=BIGINT},
+                #{deep,jdbcType=INTEGER})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.wolfcode.luowowo.article.domain.NewDestination">
+        UPDATE new_destination
+        SET parent_id = #{parent_id,jdbcType=BIGINT},
+            region_id = #{region_id,jdbcType=BIGINT},
+            name      = #{name,jdbcType=VARCHAR},
+            hot       = #{hot,jdbcType=INTEGER},
+            coverUrl  = #{coverUrl,jdbcType=VARCHAR},
+            info      = #{info,jdbcType=VARCHAR},
+            monthd_id = #{quarter.id,jdbcType=BIGINT},
+            tag_id    = #{tag.id,jdbcType=BIGINT},
+            route_id  = #{route.id,jdbcType=BIGINT},
+            deep      = #{deep,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+            id,
+            parent_id,
+            region_id,
+            name,
+            hot,
+            coverUrl,
+            info,
+            monthd_id,
+            tag_id,
+            route_id,
+            deep
+        FROM new_destination
+        WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            id,
+            parent_id,
+            region_id,
+            name,
+            hot,
+            coverUrl,
+            info,
+            monthd_id,
+            tag_id,
+            route_id,
+            deep
+        FROM new_destination
+    </select>
+    <select id="selectForList" resultMap="BaseResultMap2">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+        <where>
+            <if test="monthId != -1">
+                and q.id = #{monthId}
+            </if>
+            <choose>
+                <when test="tagTime != -1 and tagId != -1">
+                    and (d.id = #{tagTime} or d.id = #{tagId})
+                </when>
+                <otherwise>
+                    <if test="tagId != -1">
+                        and d.id = #{tagId}
+                    </if>
+                    <if test="tagTime != -1">
+                        and d.id = #{tagTime}
+                    </if>
+                </otherwise>
+            </choose>
+            <if test="dayType != -1">
+                <if test="day.max == null ">
+                    and r.day >= #{day.min}
+                </if>
+                <if test="day.max != null ">
+                    and (r.day >= #{day.min} and r.day &lt;= #{day.max})
+                </if>
+            </if>
+        </where>
+    </select>
+    <sql id="base_column">
+        SELECT
+        n.id,
+        n.parent_id,
+        n.region_id,
+        n.NAME,
+        n.hot,
+        n.coverUrl,
+        n.info,
+        q.id q_id,
+        q.name q_name,
+        d.id d_id,
+        d.name d_name,
+        r.id r_id,
+        r.name r_name,
+        r.summary r_summary,
+        r.day r_day,
+        n.deep
+    </sql>
+    <sql id="base_result">
+        FROM
+            new_destination n
+            LEFT JOIN `quarter` q ON q.id = n.monthd_id
+            LEFT JOIN destination_theme_tag d ON d.id = n.tag_id
+            LEFT JOIN route r ON r.id = n.route_id
+    </sql>
+    <select id="selectThreeDest" resultMap="BaseResultMap">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+        <where>
+            n.parent_id = #{parentId}
+        </where>
+        ORDER BY rand() LIMIT 3
+    </select>
+    <select id="selectByMonthId" resultMap="BaseResultMap">
+            SELECT
+            n.id,
+            n.parent_id,
+            n.region_id,
+            n.NAME,
+            n.hot,
+            n.coverUrl,
+            n.info,
+            q.id q_id,
+            q.name q_name,
+            d.id d_id,
+            d.name d_name,
+            r.id r_id,
+            r.name r_name,
+            r.summary r_summary,
+            r.day r_day,
+            n.deep
+            FROM
+            new_destination n
+            LEFT JOIN quarter q ON q.id = n.monthd_id
+            LEFT JOIN destination_theme_tag d ON d.id = n.tag_id
+            LEFT JOIN route r ON r.id = n.route_id
+            WHERE monthd_id = #{monthId}
+            limit 7
+    </select>
+
+</mapper>

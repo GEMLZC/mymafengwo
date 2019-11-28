@@ -1,0 +1,122 @@
+@keyframes glowling {
+    0% {
+        background-position: -820px 0;
+    }
+    100% {
+        background-position: 820px 0;
+    }
+}
+
+.hotel-btns {
+    position: relative;
+}
+
+.room_loading_wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+}
+
+.room_loading_wrapper li {
+    height: 15px;
+    margin-top: 20px;
+    -webkit-animation-duration: 1.5s;
+    animation-duration: 1.5s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-name: glowling;
+    animation-name: glowling;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    background: no-repeat #f6f6f6;
+    background-image: linear-gradient(270deg, #f6f6f6, #ebebeb 20%, #f6f6f6 40%, #f6f6f6);
+}
+
+.room_loading_wrapper li:nth-child(2) {
+    width: 80%;
+}
+
+.room_loading_wrapper li:nth-child(3) {
+    width: 45%;
+}
+
+.room_loading_wrapper li:nth-child(4) {
+    width: 55%;
+}
+
+.room_loading_wrapper li:nth-child(5) {
+    width: 70%;
+}
+
+.icon-sale0417 {
+    margin: 2px 0 0 4px;
+    display: inline-block;
+    width: 70px;
+    height: 20px;
+    background-image: url(http://images.mafengwo.net/images/hotel/hotel_index/20180417-icon.png);
+    background-position: bottom;
+    background-size: contain;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    vertical-align: top;
+}
+
+.icon-sale0420 {
+    margin: 2px 0 0 4px;
+    display: inline-block;
+    width: 60px;
+    height: 20px;
+    background-image: url(http://images.mafengwo.net/images/hotel/activity/2018_0417/20180420-icon.png);
+    background-position: bottom;
+    background-size: contain;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    vertical-align: top;
+}
+
+.hotel-sale-banner {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    background-image: url(http://images.mafengwo.net/images/hotel/hotel_index/20180417-banner.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+    margin-bottom: 20px;
+}
+
+.hotel-new-icon {
+    position: absolute;
+    display: block;
+    width: 238px;
+    height: 210px;
+    bottom: -1px;
+    left: 5px;
+    z-index: -1;
+    background-image: url('http://css.mafengwo.net/images/hotel/new-customer-icon.gif');
+    background-size: 100% 100%;
+}
+
+.hotel-new-icon:hover {
+    z-index: 0;
+    background-image: url('http://css.mafengwo.net/images/hotel/new-customer-hover-icon.png');
+}
+
+.hotel-new-icon .close {
+    position: absolute;
+    display: block;
+    width: 25px;
+    height: 25px;
+    right: 0;
+    bottom: 83px;
+    border-radius: 50%;
+}
+
+.toolbar-item-top, .toolbar-item-feedback, .toolbar-item-code {
+    padding-left: 40px;
+}

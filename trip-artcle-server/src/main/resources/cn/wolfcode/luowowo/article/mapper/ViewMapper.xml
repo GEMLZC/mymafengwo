@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.ViewMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.View">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="engName" property="engName"/>
+        <result column="img" property="img"/>
+        <result column="hot" property="hot"/>
+        <result column="info" property="info"/>
+        <result column="tel" property="tel"/>
+        <result column="link" property="link"/>
+        <result column="takeTime" property="takeTime"/>
+        <result column="lastUpdateTime" property="lastUpdateTime"/>
+        <result column="createTime" property="createTime"/>
+        <result column="commentnum" property="commentnum"/>
+        <result column="favornum" property="favornum"/>
+        <result column="visitnum" property="visitnum"/>
+        <result column="summary" property="summary"/>
+        <result column="type" property="type"/>
+
+        <association property="children" select="cn.wolfcode.luowowo.article.mapper.ViewMapper.selectByParentId"
+                     column="id"/>
+
+        <collection property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="dest_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </collection>
+        <collection property="parent" javaType="cn.wolfcode.luowowo.article.domain.View" columnPrefix="parent_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </collection>
+
+
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM view
+        WHERE id = #{id}
+    </delete>
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO view (name, engName, dest_id, parent_id, img, hot, info, tel,
+                          link, takeTime, lastUpdateTime, createTime, commentnum, favornum,
+                          visitnum, summary, type)
+        VALUES (#{name}, #{engName}, #{dest.id}, #{parent.id}, #{img}, #{hot}, #{info}, #{tel},
+                         #{link}, #{takeTime}, #{lastUpdateTime}, #{createTime}, #{commentnum}, #{favornum},
+                #{visitnum}, #{summary}, #{type})
+    </insert>
+    <update id="updateByPrimaryKey">
+        UPDATE view
+        SET name           = #{name},
+            engName        = #{engName},
+            dest_id        = #{dest.id},
+            parent_id      = #{parent.id},
+            img            = #{img},
+            hot            = #{hot},
+            info           = #{info},
+            tel            = #{tel},
+            link           = #{link},
+            takeTime       = #{takeTime},
+            lastUpdateTime = #{lastUpdateTime},
+            createTime     = #{createTime},
+            commentnum     = #{commentnum},
+            favornum       = #{favornum},
+            visitnum       = #{visitnum},
+            summary        = #{summary},
+            type           = #{type}
+        WHERE id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        <include refid="sql_column"/>
+        where v.id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        <include refid="sql_column"/>
+    </select>
+
+    <select id="selectByParentId" resultMap="BaseResultMap">
+        <include refid="sql_column"/>
+        where v.parent_id=#{id}
+    </select>
+
+    <select id="queryForList" resultMap="BaseResultMap">
+        <include refid="sql_column"/>
+        <where>
+            <if test="tagId>0">
+                and tag.id=#{tagId}
+            </if>
+            <if test="parentId>0">
+                and v.parent_id=#{parentId}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="selectByDestAndType" resultMap="BaseResultMap">
+        <include refid="sql_column"/>
+        <where>
+            <if test="type>-1">
+                and v.type=#{type}
+            </if>
+            <if test="destId>-1">
+                and dest.id=#{destId}
+            </if>
+        </where>
+        order by v.commentnum desc
+    </select>
+    <select id="selectByTagIs" resultMap="BaseResultMap">
+        <include refid="sql_column"/>
+
+        <where>
+            <if test="tagId>-1">
+                and tag.id=#{tagId}
+            </if>
+        </where>
+    </select>
+
+    <sql id="sql_column">
+        SELECT DISTINCT
+            v.id,
+            v.NAME,
+            v.engName,
+            v.img,
+            v.hot,
+            v.info,
+            v.tel,
+            v.link,
+            v.takeTime,
+            v.lastUpdateTime,
+            v.createTime,
+            v.commentnum,
+            v.favornum,
+            v.visitnum,
+            v.summary,
+            v.type,
+            dest.id         dest_id,
+            dest.name       dest_name,
+            parent.id       parent_id,
+            parent.name     parent_name,
+            tag.id          tag_id
+
+        FROM
+            VIEW v LEFT JOIN destination dest ON v.dest_id = dest.id
+            LEFT JOIN view parent ON v.parent_id = parent.id
+            LEFT JOIN view_tag_relation rel ON v.id = rel.view_id
+            LEFT JOIN view_tag tag ON tag.id = rel.tag_id
+
+    </sql>
+</mapper>

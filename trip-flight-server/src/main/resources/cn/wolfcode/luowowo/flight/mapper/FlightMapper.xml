@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.flight.mapper.FlightMapper">
+  <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.flight.domain.Flight">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="flightno" jdbcType="VARCHAR" property="flightno" />
+    <result column="depport" jdbcType="VARCHAR" property="depport" />
+    <result column="arrport" jdbcType="VARCHAR" property="arrport" />
+    <result column="deptTime" jdbcType="TIMESTAMP" property="deptTime" />
+    <result column="arrTime" jdbcType="TIMESTAMP" property="arrTime" />
+    <result column="price" jdbcType="BIGINT" property="price" />
+    <association property="orgcity" javaType="cn.wolfcode.luowowo.flight.domain.FlightDest" columnPrefix="o">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="name" property="name"/>
+      <result column="aircode" property="aircode"/>
+    </association>
+    <association property="dstcity" javaType="cn.wolfcode.luowowo.flight.domain.FlightDest" columnPrefix="d">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="name" property="name"/>
+      <result column="aircode" property="aircode"/>
+    </association>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from flight
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.wolfcode.luowowo.flight.domain.Flight" useGeneratedKeys="true">
+    insert into flight (orgcity, dstcity, flightno, 
+      depport, arrport, deptTime, 
+      arrTime, price)
+    values (#{orgcity.id,jdbcType=BIGINT}, #{dstcity.id,jdbcType=BIGINT}, #{flightno,jdbcType=VARCHAR}, 
+      #{depport,jdbcType=VARCHAR}, #{arrport,jdbcType=VARCHAR}, #{deptTime,jdbcType=TIMESTAMP}, 
+      #{arrTime,jdbcType=TIMESTAMP}, #{price,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.wolfcode.luowowo.flight.domain.Flight">
+    update flight
+    set orgcity = #{orgcity.id,jdbcType=BIGINT},
+      dstcity = #{dstcity.id,jdbcType=BIGINT},
+      flightno = #{flightno,jdbcType=VARCHAR},
+      depport = #{depport,jdbcType=VARCHAR},
+      arrport = #{arrport,jdbcType=VARCHAR},
+      deptTime = #{deptTime,jdbcType=TIMESTAMP},
+      arrTime = #{arrTime,jdbcType=TIMESTAMP},
+      price = #{price,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+   <include refid="base_column"/>
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    <include refid="base_column"/>
+  </select>
+  <select id="queryForList" resultMap="BaseResultMap">
+    <include refid="base_column"/>
+    <where>
+      <if test="orgCity!=null">
+        and o.aircode = #{orgCity}
+      </if>
+      <if test="dstCity!=null">
+        and d.aircode = #{dstCity}
+      </if>
+      <if test="depTime!=null">
+        and DATE_FORMAT(f.deptTime, '%Y-%m-%d') = #{depTime}
+      </if>
+
+    </where>
+    <if test="orderBy!=null and orderBy!=''">
+        order by ${orderBy}
+    </if>
+  </select>
+  <sql id="base_column">
+    select f.id, f.flightno, f.depport, f.arrport, f.deptTime, f.arrTime, f.price,
+    o.id o_id,o.name o_name,o.aircode o_aircode,
+    d.id d_id,d.name d_name,d.aircode d_aircode
+    from flight f
+    LEFT JOIN flight_dest o on f.orgcity=o.id
+    LEFT JOIN flight_dest d on f.dstcity=d.id
+  </sql>
+</mapper>

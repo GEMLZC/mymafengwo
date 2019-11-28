@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.hotel.mapper.HotelMapper">
+  <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.hotel.domain.Hotel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="score" jdbcType="DOUBLE" property="score" />
+    <result column="star" jdbcType="INTEGER" property="star" />
+    <result column="price" jdbcType="BIGINT" property="price" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="commentnum" jdbcType="BIGINT" property="commentnum" />
+    <result column="travelnum" jdbcType="BIGINT" property="travelnum" />
+    <result column="coverUrl" jdbcType="VARCHAR" property="coverUrl" />
+    <result column="roomnum" jdbcType="BIGINT" property="roomnum" />
+    <result column="sellnum" jdbcType="BIGINT" property="sellnum" />
+    <result column="english" jdbcType="VARCHAR" property="english" />
+    <result column="closeSub" jdbcType="INTEGER" property="closeSub" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="url" property="url"/>
+    <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result property="name" column="name"/>
+    </association>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from hotel
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.wolfcode.luowowo.hotel.domain.Hotel" useGeneratedKeys="true">
+    insert into hotel (dest_id, score, star, 
+      price, type, brand, 
+      info, location, commentnum, 
+      travelnum, coverUrl, roomnum, 
+      sellnum, english, closeSub, 
+      name)
+    values (#{dest.id,jdbcType=BIGINT}, #{score,jdbcType=DOUBLE}, #{star,jdbcType=INTEGER}, 
+      #{price,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{brand,jdbcType=VARCHAR}, 
+      #{info,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, #{commentnum,jdbcType=BIGINT}, 
+      #{travelnum,jdbcType=BIGINT}, #{coverUrl,jdbcType=VARCHAR}, #{roomnum,jdbcType=BIGINT}, 
+      #{sellnum,jdbcType=BIGINT}, #{english,jdbcType=VARCHAR}, #{closeSub,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.wolfcode.luowowo.hotel.domain.Hotel">
+    update hotel
+    set dest_id = #{dest.id,jdbcType=BIGINT},
+      score = #{score,jdbcType=DOUBLE},
+      star = #{star,jdbcType=INTEGER},
+      price = #{price,jdbcType=BIGINT},
+      type = #{type,jdbcType=INTEGER},
+      brand = #{brand,jdbcType=VARCHAR},
+      info = #{info,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      commentnum = #{commentnum,jdbcType=BIGINT},
+      travelnum = #{travelnum,jdbcType=BIGINT},
+      coverUrl = #{coverUrl,jdbcType=VARCHAR},
+      roomnum = #{roomnum,jdbcType=BIGINT},
+      sellnum = #{sellnum,jdbcType=BIGINT},
+      english = #{english,jdbcType=VARCHAR},
+      closeSub = #{closeSub,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, dest_id, score, star, price, type, brand, info, location, commentnum, 
+    travelnum, coverUrl, roomnum, sellnum, english, closeSub, name
+    from hotel
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, dest_id, score, star, price, type, brand, info, location, commentnum, 
+    travelnum, coverUrl, roomnum, sellnum, english, closeSub, name
+    from hotel
+  </select>
+    <select id="selectByDestId" resultMap="BaseResultMap">
+      <include refid="base_colum"/>
+      where d.id=#{id}
+    </select>
+    <select id="selectAllBrand" resultType="java.lang.String">
+      select DISTINCT brand from hotel where dest_id=#{destId}
+    </select>
+  <select id="queryForList" resultMap="BaseResultMap">
+    select h.id, h.score, h.star, h.price, h.type, h.brand, h.info, h.location, h.commentnum,
+    h.travelnum, h.coverUrl, h.roomnum, h.sellnum, h.english, h.closeSub, h.name,h.url,
+    d.id d_id,d.name d_name
+    from hotel h
+    LEFT JOIN destination d on d.id=h.dest_id
+    <if test="area!=-1">
+      left JOIN  hotel_area_relation ha on ha.hotel_id=h.id
+    </if>
+    <if test="facilities!=-1">
+      left join hotel_facilities_relation hfr ON h.id=hfr.hotel_id
+    </if>
+    <if test="hoteltag!=-1">
+      left join hotel_tag_relation htr on htr.hotel_id=h.id
+    </if>
+    <where>
+      h.dest_id=#{destId}
+      <if test="keyword!=null">
+        and (h.name like concat("%",#{keyword},"%")or h.info like concat("%",#{keyword},"%"))
+      </if>
+      <if test="type!=-1">
+        and h.type = #{type}
+      </if>
+      <if test="brand!=null and brand!='' ">
+        and h.brand = #{brand}
+      </if>
+      <if test="facilities!=-1">
+        and hfr.facilities_id=#{facilities}
+      </if>
+      <if test="area!=-1">
+        and ha.dest_area_id=#{area}
+      </if>
+      <if test="hoteltag!=-1">
+        and htr.tag_id=#{hoteltag}
+      </if>
+      <if test="star!=-1">
+        and h.star=#{star}
+      </if>
+      <if test="price!=null">
+        and h.price &gt;= #{price}
+      </if>
+      <if test="closeSub!=0">
+        and h.closeSub = 1
+      </if>
+      <if test="hasroom!=0">
+        and h.roomnum &gt; 0
+      </if>
+
+    </where>
+    <if test="orderBy!=null and orderBy!=''">
+      order by ${orderBy} desc
+    </if>
+  </select>
+  <sql id="base_colum">
+    select h.id, h.score, h.star, h.price, h.type, h.brand, h.info, h.location, h.commentnum,
+      h.travelnum, h.coverUrl, h.roomnum, h.sellnum, h.english, h.closeSub, h.name,h.url,
+    d.id d_id,d.name d_name
+    from hotel h
+    LEFT JOIN destination d on d.id=h.dest_id
+  </sql>
+
+</mapper>

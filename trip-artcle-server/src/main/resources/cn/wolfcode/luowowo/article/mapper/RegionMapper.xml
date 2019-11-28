@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.RegionMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.Region">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="sn" jdbcType="VARCHAR" property="sn"/>
+        <result column="ref" jdbcType="VARCHAR" property="ref"/>
+        <result column="info" jdbcType="VARCHAR" property="info"/>
+        <result column="hot" jdbcType="INTEGER" property="hot"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM region
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.wolfcode.luowowo.article.domain.Region"
+            useGeneratedKeys="true">
+        INSERT INTO region (name, sn, ref,
+                            info, hot, state)
+        VALUES (#{name,jdbcType=VARCHAR}, #{sn,jdbcType=VARCHAR}, #{ref,jdbcType=VARCHAR},
+                #{info,jdbcType=VARCHAR}, #{hot,jdbcType=INTEGER}, #{state,jdbcType=INTEGER})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.wolfcode.luowowo.article.domain.Region">
+        UPDATE region
+        SET name  = #{name,jdbcType=VARCHAR},
+            sn    = #{sn,jdbcType=VARCHAR},
+            ref   = #{ref,jdbcType=VARCHAR},
+            info  = #{info,jdbcType=VARCHAR},
+            hot   = #{hot,jdbcType=INTEGER},
+            state = #{state,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <include refid="base_result"/>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        <include refid="base_result"/>
+    </select>
+    <select id="selectForList" resultType="Region">
+        <include refid="base_result"/>
+    </select>
+
+    <sql id="base_result">
+        SELECT
+            id,
+            name,
+            sn,
+            ref,
+            info,
+            hot,
+            state
+        FROM region
+    </sql>
+    <select id="selectHostRegion" resultMap="BaseResultMap">
+        <include refid="base_result"/>
+        where hot = 1 and state = 1 limit 5
+    </select>
+</mapper>

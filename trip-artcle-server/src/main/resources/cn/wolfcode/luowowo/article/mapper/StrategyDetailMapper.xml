@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.StrategyDetailMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.StrategyDetail">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="subTitle" jdbcType="VARCHAR" property="subTitle"/>
+        <result column="summary" jdbcType="VARCHAR" property="summary"/>
+        <result column="coverUrl" jdbcType="VARCHAR" property="coverUrl"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="viewnum" jdbcType="INTEGER" property="viewnum"/>
+        <result column="replynum" jdbcType="INTEGER" property="replynum"/>
+        <result column="favornum" jdbcType="INTEGER" property="favornum"/>
+        <result column="sharenum" jdbcType="INTEGER" property="sharenum"/>
+        <result column="thumbsupnum" jdbcType="INTEGER" property="thumbsupnum"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <association property="dest" javaType="Destination" columnPrefix="d_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <association property="catalog" javaType="StrategyCatalog" columnPrefix="sc_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <association property="theme" javaType="StrategyTheme" columnPrefix="st_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <association property="author" javaType="User" columnPrefix="u_">
+            <id column="id" property="id"/>
+            <result column="nickname" property="nickname"/>
+            <result column="headImgUrl" property="headImgUrl"/>
+        </association>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM strategy_detail
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="cn.wolfcode.luowowo.article.domain.StrategyDetail" useGeneratedKeys="true">
+        INSERT INTO strategy_detail (dest_id, theme_id, catalog_id,
+                                     title, subTitle, summary,
+                                     coverUrl, createTime, viewnum,
+                                     replynum, favornum, sharenum,
+                                     thumbsupnum, state)
+        VALUES (#{dest.id,jdbcType=BIGINT}, #{theme.id,jdbcType=BIGINT}, #{catalog.id,jdbcType=BIGINT},
+                                            #{title,jdbcType=VARCHAR}, #{subTitle,jdbcType=VARCHAR},
+                                            #{summary,jdbcType=VARCHAR},
+                                            #{coverUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                                            #{viewnum,jdbcType=INTEGER},
+                                            #{replynum,jdbcType=INTEGER}, #{favornum,jdbcType=INTEGER},
+                #{sharenum,jdbcType=INTEGER},
+                #{thumbsupnum,jdbcType=INTEGER}, #{state,jdbcType=INTEGER})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.wolfcode.luowowo.article.domain.StrategyDetail">
+        UPDATE strategy_detail
+        SET dest_id    = #{dest.id,jdbcType=BIGINT},
+            theme_id   = #{theme.id,jdbcType=BIGINT},
+            catalog_id = #{catalog.id,jdbcType=BIGINT},
+            title      = #{title,jdbcType=VARCHAR},
+            subTitle   = #{subTitle,jdbcType=VARCHAR},
+            coverUrl   = #{coverUrl,jdbcType=VARCHAR},
+            state      = #{state,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+        WHERE s.id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+    </select>
+    <select id="selectForList" resultMap="BaseResultMap">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+        <where>
+            <if test="destId != -1">
+                and s.dest_id = #{destId}
+            </if>
+            <if test="tagId != -1">
+                AND dt.tag_id = #{tagId}
+            </if>
+        </where>
+    </select>
+    <sql id="base_column">
+        SELECT
+            DISTINCT
+            s.id,
+            d.id      d_id,
+            d.`name`  d_name,
+            u.id      u_id,
+            u.nickname u_nickname,
+            u.headImgUrl u_headImgUrl,
+
+            st.id     st_id,
+            st.`name` st_name,
+            sc.id     sc_id,
+            sc.`name` sc_name,
+            s.title,
+            s.subTitle,
+            s.summary,
+            s.coverUrl,
+            s.createTime,
+            s.viewnum,
+            s.replynum,
+            s.favornum,
+            s.sharenum,
+            s.thumbsupnum,
+            s.state
+
+
+    </sql>
+    <sql id="base_result">
+        FROM
+            strategy_detail s
+            LEFT JOIN strategy_catalog sc ON s.catalog_id = sc.id
+            LEFT JOIN destination d ON d.id = s.dest_id
+            LEFT JOIN strategy_theme st ON s.theme_id = st.id
+            LEFT JOIN detail_tag_relation dt ON dt.detail_id = s.id
+            left join user u ON s.author_id=u.id
+    </sql>
+    <insert id="insertDetailTag">
+        INSERT INTO detail_tag_relation VALUE (#{detailId}, #{tagId})
+    </insert>
+    <delete id="deleteDetailTagByPrimaryKey">
+        DELETE FROM detail_tag_relation
+        WHERE detail_id = #{id}
+    </delete>
+
+    <select id="selectByCatalogId" resultType="StrategyDetail">
+        SELECT
+            id,
+            title
+        FROM strategy_detail
+        WHERE catalog_id = #{catalogId}
+    </select>
+    <select id="selectByDestId" resultType="StrategyDetail">
+        SELECT
+            id,
+            title,
+            coverUrl,
+            summary
+        FROM strategy_detail
+        WHERE dest_id = #{destId}
+        ORDER BY viewnum DESC
+        LIMIT 3
+    </select>
+    <update id="updateStats">
+        UPDATE strategy_detail
+        SET
+            viewnum     = #{viewnum},
+            replynum    = #{replynum},
+            favornum    = #{favornum},
+            thumbsupnum = #{thumbsupnum},
+            sharenum = #{sharenum}
+        WHERE id = #{id}
+    </update>
+</mapper>

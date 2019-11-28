@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.DestinationMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.Destination">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="hot" jdbcType="INTEGER" property="hot"/>
+        <result column="coverUrl" jdbcType="VARCHAR" property="coverUrl"/>
+        <result column="info" jdbcType="VARCHAR" property="info"/>
+        <result column="deep" jdbcType="INTEGER" property="deep"/>
+        <association property="parent" javaType="Destination" columnPrefix="parent_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+        <association property="region" javaType="Region" columnPrefix="r_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+
+
+    <resultMap id="BaseResultMap2" type="cn.wolfcode.luowowo.article.domain.Destination">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="hot" jdbcType="INTEGER" property="hot"/>
+        <result column="coverUrl" jdbcType="VARCHAR" property="coverUrl"/>
+        <result column="info" jdbcType="VARCHAR" property="info"/>
+        <result column="deep" jdbcType="INTEGER" property="deep"/>
+        <association property="parent" javaType="Destination" columnPrefix="parent_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+        <association property="region" javaType="Region" columnPrefix="r_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+        <collection property="children" column="id" select="selectByParentId"/>
+    </resultMap>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM destination
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.wolfcode.luowowo.article.domain.Destination"
+            useGeneratedKeys="true">
+        INSERT INTO destination (parent_id, region_id, name,
+                                 hot, coverUrl, info,
+                                 deep)
+        VALUES (#{parent.id,jdbcType=BIGINT}, #{region.id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
+                #{hot,jdbcType=INTEGER}, #{coverUrl,jdbcType=VARCHAR}, #{info,jdbcType=VARCHAR},
+                #{deep,jdbcType=INTEGER})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.wolfcode.luowowo.article.domain.Destination">
+        UPDATE destination
+        SET parent_id = #{parent.id,jdbcType=BIGINT},
+            region_id = #{region.id,jdbcType=BIGINT},
+            name      = #{name,jdbcType=VARCHAR},
+            hot       = #{hot,jdbcType=INTEGER},
+            coverUrl  = #{coverUrl,jdbcType=VARCHAR},
+            info      = #{info,jdbcType=VARCHAR},
+            deep      = #{deep,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap2">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+        WHERE d.id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+        <choose>
+            <when test="parentId > -1">
+                <where>
+                    d.parent_id = #{parentId}
+                </where>
+            </when>
+            <otherwise>
+                <where>
+                    d.parent_id is null
+                </where>
+            </otherwise>
+        </choose>
+        <if test="keyword != null">
+            and d.NAME like concat('%',#{keyword} ,'%')
+        </if>
+        <if test="hot != -1">
+            and d.hot = #{hot}
+        </if>
+    </select>
+    <sql id="base_column">
+        SELECT
+            d.id,
+            parent.id parent_id,
+            parent.`name` parent_name,
+            r.id r_id,
+            r.`name` r_name,
+            d.NAME,
+            d.hot,
+            d.coverUrl,
+            d.info,
+            d.deep
+    </sql>
+    <sql id="base_result">
+        from destination d
+        LEFT JOIN destination parent on d.parent_id = parent.id
+        LEFT JOIN region r on d.region_id = r.id
+    </sql>
+    <update id="updateHost">
+        update destination set hot = #{status} where id = #{id}
+    </update>
+    <update id="updateInfoById">
+        update destination set info = #{info} where id = #{id}
+    </update>
+    <select id="selectByPrimaryKeyArray" resultMap="BaseResultMap">
+        select id, name
+        from destination where id IN
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="selectAllDest" resultType="Destination">
+
+        select id,name from destination
+    </select>
+    <select id="selectByRegionId" resultMap="BaseResultMap2">
+        select d.id  , d.`name`,r.id r_id,r.`name` r_name
+        from destination d left join region r on d.region_id = r.id
+        <where>
+            <if test="regionId > -1">
+                r.id = #{regionId}
+            </if>
+            <if test="regionId == -1">
+                d.parent_id = 1
+            </if>
+            <if test="regionId == 1">
+                and d.name != '中国'
+            </if>
+        </where>
+    </select>
+    <select id="selectByParentId" resultType="cn.wolfcode.luowowo.article.domain.Destination">
+        select id, name from destination where parent_id = #{parentId} and hot = 1
+    </select>
+    <select id="selectAllNoPage" resultMap="BaseResultMap">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+    </select>
+    <select id="selectByRegionIdTop12" resultMap="BaseResultMap2">
+        select d.id  , d.`name`,r.id r_id,r.`name` r_name
+        from destination d left join region r on d.region_id = r.id
+        <where>
+            <if test="regionId > -1">
+                r.id = #{regionId}
+            </if>
+            <if test="regionId == -1">
+                d.parent_id = 1
+            </if>
+            <if test="regionId == 1">
+                and d.name != '中国'
+            </if>
+        </where>
+        limit 0,12
+    </select>
+    <select id="selectByName" resultType="cn.wolfcode.luowowo.article.domain.Destination">
+        <include refid="base_column"/>
+        <include refid="base_result"/>
+        where  d.name =#{destName}
+    </select>
+
+</mapper>

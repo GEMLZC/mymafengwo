@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.DestinationThemeTagMapper">
+  <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.DestinationThemeTag">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="coverImg" property="coverImg"/>
+    <association property="theme" columnPrefix="d_" javaType="cn.wolfcode.luowowo.article.domain.DestinationTheme">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+    </association>
+
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from destination_theme_tag
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.wolfcode.luowowo.article.domain.DestinationThemeTag" useGeneratedKeys="true">
+    insert into destination_theme_tag (name, theme_id)
+    values (#{name,jdbcType=VARCHAR}, #{theme.id,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.wolfcode.luowowo.article.domain.DestinationThemeTag">
+    update destination_theme_tag
+    set name = #{name,jdbcType=VARCHAR},
+        theme_id = #{theme.id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, name, theme_id,coverImg
+    from destination_theme_tag
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, theme_id,coverImg
+    from destination_theme_tag
+  </select>
+  <select id="selectByThemeId" resultMap="BaseResultMap">
+    SELECT id,name,coverImg FROM destination_theme_tag WHERE theme_id =#{themeId}
+  </select>
+</mapper>

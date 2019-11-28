@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.member.mapper.UserInfoMapper">
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO userinfo (nickname, phone, email, password, level, gender, city,
+                              birthday, headImgUrl, info)
+        VALUES (#{nickname}, #{phone}, #{email}, #{password}, #{level}, #{gender}, #{city},
+                #{birthday}, #{headImgUrl}, #{info})
+    </insert>
+    <select id="selectUseInforByPhone" resultType="cn.wolfcode.luowowo.member.domain.UserInfo">
+        SELECT
+            id,
+            phone
+        FROM userinfo
+        WHERE phone = #{phone}
+    </select>
+    <select id="selectUserInfoByPhoneAndPassword" resultType="cn.wolfcode.luowowo.member.domain.UserInfo">
+        SELECT
+            id,
+            nickname,
+            phone,
+            email,
+            password,
+            level,
+            gender,
+            city,
+            birthday,
+            headImgUrl,
+            info
+        FROM userinfo
+        WHERE phone = #{phone} AND password = #{password}
+    </select>
+    <select id="selectAll" resultType="cn.wolfcode.luowowo.member.domain.UserInfo">
+        SELECT
+            id,
+            nickname,
+            phone,
+            email,
+            password,
+            level,
+            gender,
+            city,
+            birthday,
+            headImgUrl,
+            info
+        FROM userinfo
+    </select>
+
+    <select id="selectByPrimaryKey" resultType="cn.wolfcode.luowowo.member.domain.UserInfo">
+        SELECT
+            id,
+            nickname,
+            phone,
+            email,
+            password,
+            level,
+            gender,
+            city,
+            birthday,
+            headImgUrl,
+            info
+        FROM userinfo
+        WHERE id =#{userId}
+    </select>
+</mapper>

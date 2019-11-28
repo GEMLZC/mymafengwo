@@ -1,0 +1,146 @@
+@charset "utf-8";
+
+body{ color: #666;}
+
+.daoju_list .info i,.daoju_list .buy span i,.daoju_list .coming_soon .info,.side_my .gold i,.col-side .pagin a{ background: url("../images/sprite_v2.png") no-repeat;}
+
+#header {margin-bottom: 0;}
+.container {width: 980px;margin: 0 auto; padding-bottom: 50px;}
+
+
+/* 导航 */
+.mt-nav{ width: 1000px; margin: 0 auto; padding: 25px 0; font-size: 14px; line-height:30px;}
+.mt-nav a{float:left;height:30px;margin-right:30px;color:#666;}
+.mt-nav a:hover,.mt-nav a.on{text-decoration:none;color:#ff8a00;}
+.mt-nav em{float:left;margin:7px 9px 0;width:1px;height:16px;background-color:#ccc;overflow:hidden;line-height:100px;}
+.mt-nav a.mt_what {float: right;margin-right:0;font-size:12px;color:#999;}
+.mt-nav a.mt_what:hover{color:#ff8a00;}
+.mt-nav .nav-wealth{float:right;margin:-3px 0 0 15px;font-size:14px;}
+.mt-nav .nav-wealth b{font-size:20px;color:#444;font-family:Verdana;position:relative;bottom:-2px;line-height:28px;}
+.mt-nav .nav-wealth var{padding:0 6px;font-size:20px;color:#999;font-family:Verdana;position:relative;bottom:-0px;line-height:28px;}
+.mt-nav .nav-wealth .btn{float:none;display:inline-block;margin-right:0;padding:0 10px 0 0;color:#ff8a00;line-height:28px;position:relative;}
+.mt-nav .nav-wealth .btn i{position:absolute;right:0;top:10px;width:0;height:0;border-left:5px solid #ff8a00;border-top:4px dashed transparent;border-bottom:4px dashed transparent;font-size:0;overflow:hidden;}
+.mt-nav a span{ display: inline-block; padding: 0 4px; height: 16px; background-color: #d43939; font-size: 12px; line-height: 16px; text-align: center; color: #fff; position: relative; margin-left: 12px; top: -2px;}
+.mt-nav a span:before{ content: ""; display: block; width: 0; height: 0; border-top: 8px solid transparent; border-right: 8px solid #d43939; border-bottom: 8px solid transparent; position: absolute; left: -8px; top: 0;}
+
+
+/* banner */
+.banner{ width: 100%; height: 270px; margin-bottom: 13px;}
+.banner img{ display: block; width: 100%; height: 100%;}
+
+
+/* main */
+.col-main{float:left;width:650px;}
+
+.daoju_tab{ width: 100%; height: 54px; line-height:54px; border-bottom: 1px solid #e4e4e4; margin-bottom: 20px; position: relative;}
+.daoju_tab a{ display: block; float: left; width: 180px; font-size: 18px; text-align: center; color: #333; position: relative;}
+.daoju_tab strong{ display: block; width: 180px; height: 3px; background-color: #fc9c27; position: absolute; left: 0; bottom: -2px;}
+.daoju_tab a:hover{ text-decoration: none;}
+.daoju_tab a.active{ color: #fc9c27;}
+
+.daoju_list{}
+.daoju_list ul{ width: 700px;}
+.daoju_list li{ width: 300px; float: left; margin-bottom: 40px; margin-right: 50px;}
+.daoju_list .info{ width: 298px; height: 298px; border: 1px solid #e5e5e5; position: relative;}
+.daoju_list .info img{ display: block; width: 100%; height: 100%;}
+.daoju_list .info .name{ width: 100%; height: 22px; font-size: 16px; color: #666; text-align: center; line-height: 22px; position: absolute; left: 0; bottom: 15px;}
+.daoju_list .info .name span{ display: inline-block; padding: 0 12px; height: 20px; border: 1px solid #e5e5e5; border-radius: 10px; font-size: 14px; color: #aaa; line-height: 20px; margin-left: 6px;}
+.daoju_list .info i{ display: block; width: 66px; height: 66px; position: absolute; right: 0; top: 0;}
+.daoju_list .info i.state1{ background-position: 0px 0px;}
+.daoju_list .info i.state2{ background-position: -66px 0px;}
+.daoju_list .info i.state3{ background-position: -132px 0px;}
+.daoju_list .info i.state4{ background-position: -198px 0px;}
+.daoju_list .info i.state5{ background-position: -528px 0px;}
+.daoju_list .coming_soon .info{ background-position: 0 -254px;}
+.daoju_list .intro_mask{ width: 260px; height: 180px; padding: 59px 19px; background-color: rgba(74,79,85,0.8); position: absolute; left: 0; top: 0;}
+.daoju_list .intro{ width: 100%; height: 100%; color: #fff; overflow: hidden;}
+.daoju_list .intro span{ display: block; font-size: 18px; line-height: 40px;}
+.daoju_list .intro p{ font-size: 14px; line-height: 24px;}
+
+.daoju_list .buy{ margin-top: 20px; height: 36px; line-height: 36px;}
+.daoju_list .buy span{ float: left; font-size: 20px; color: #ff9d00;}
+.daoju_list .buy span i{ display: inline-block; vertical-align: middle; width: 22px; height: 22px; margin-right: 10px; margin-top: -3px;}
+.daoju_list .buy span i.icon_gold{ background-position: -264px 0;}
+.daoju_list .buy span i.icon_honey{ background-position: -308px 0;}
+.daoju_list .buy .btn_buy{ display: block; float: right; width: 100px; height: 36px; border-radius: 4px; background-color: #ff9d00; font-size: 16px; color: #fff; text-align: center; -webkit-transition: all 0.5s; webkit-transition: all 0.5s;}
+.daoju_list .buy .btn_buy:hover{ text-decoration: none; background-color: #ff8a00;}
+.daoju_list .buy .btn_buy.disabled{ background-color: #aaa; cursor: default;}
+.daoju_list .times{ margin-top: 12px; text-align: right; font-size: 12px; color: #999; line-height: 24px;}
+
+
+/* side */
+.col-side{ float: right; width: 300px; padding-top: 76px;}
+
+
+/* 资产 */
+.side_my{ width: 258px; padding: 18px 20px 14px; border: 1px solid #e5e5e5; line-height: 24px;}
+.side_my p{ font-size: 16px; color: #999;}
+.side_my .gold{ line-height: 36px; font-size: 24px; color: #ff9d00;}
+.side_my .gold i{ display: inline-block; vertical-align: middle; width: 22px; height: 22px; margin-right: 6px; margin-top: -3px; background-position: -264px 0;}
+.side_my .honey{ font-size: 14px; color: #999; margin-top: 12px;}
+.side_my .honey span{ font-size: 16px; color: #ff9d00;}
+
+
+/* 留言板 */
+.side_cmt{margin-top: 47px;}
+.side_cmt .tit{ margin-bottom: 16px; font-size: 16px; line-height: 24px; color: #666;}
+.side_cmt .pub textarea{ width: 288px; height: 88px; border:1px solid #efefef; background-color: #efefef; padding: 5px; margin-bottom: 10px; font-size: 12px; color: #666; resize: none;}
+.side_cmt .pub textarea:focus{ background-color: #fff; border-color: #ffb133; box-shadow: 0 0 3px #ff9d00; outline: none;}
+.side_cmt .pub input{ width:100%; height: 30px; line-height: 30px; margin-bottom: 5px; border: 0; padding: 0; background-color: #efefef; border-radius: 2px; font-size: 14px; color: #999; cursor: pointer; -webkit-transition: all 0.5s; webkit-transition: all 0.5s;}
+.side_cmt .pub input:hover{ background-color: #ff9d00; color: #fff;}
+
+.cmt_list li{ border-bottom: 1px solid #efefef; padding: 15px 0 17px 40px; line-height: 20px;}
+.cmt_list img{ width: 32px; height: 32px; border-radius: 50%; float: left; margin-left: -40px;}
+.cmt_list a{ font-size: 12px; line-height: 22px; color: #ff9d00;}
+.cmt_list .reply{ float: right;}
+.cmt_list .user{ margin-right: 8px;}
+.cmt_list .level{ color: #eb5443;}
+.cmt_list .date{ display: block; color: #999;}
+.cmt_list p{ margin-top: 2px;}
+
+
+/* 翻页 */
+.col-side .pagin{ margin-top: 18px; text-align: right; line-height: 24px;}
+.col-side .pagin span { margin-right: 5px; color: #999;}
+.col-side .pagin a{ display: inline-block; margin: 0 2px; width: 7px; height: 11px; vertical-align: middle; margin-top: -3px;}
+.col-side .pagin .btn-left{ background-position: -396px 0;}
+.col-side .pagin .btn-right{ background-position: -416px 0;}
+
+/* 没有道具 */
+.daoju_none{ width: 100%; padding-top: 40px;}
+.daoju_none img{ display: block; margin: 0 auto;}
+.daoju_none p{ font-size: 16px; line-height: 48px; text-align: center; color: #999;}
+
+/* 翻页 */
+.page-box{padding: 0 5px;line-height:24px;text-align:right;font-size:12px;color:#999}
+.page-box .count{padding-right:12px}
+.page-box .ti{display:inline-block;margin-right:1px;margin-left:1px;padding:0 7px;border:0 none;background:0;border-radius:4px;color:#666;vertical-align:middle}
+.page-box .next{height:auto;margin-top:0}
+.page-box .ti:hover{background-color:#efefef;border:0 none;text-decoration:none;color:#666}
+.page-box .pagin .pg-current{background-color:#ffc75a;color:#fff}
+.page-box .first,.page-box .prev,.page-box .next,.page-box .last,.page-box .this-page{display:inline-block;margin-right:5px;background-color:#ffc75a;padding:0 8px;border-radius:4px;color:#fff;vertical-align:middle}
+.page-box .first:hover,.page-box .prev:hover,.page-box .next:hover,.page-box .last:hover{background-color:#ff8a00;color:#fff}.page-box .this-page{padding:0 7px}
+.page-box .pg-jump input{margin:0 3px 0 0;border:1px solid #d2d2d2;border-radius:4px;height:22px;padding:0 5px;width:30px;line-height:22px;font-size:12px;text-align:center;vertical-align:middle}
+.page-box .pg-jump a{display:inline-block;border:0 none;background-color:#efefef;padding:0 7px;border-radius:4px;color:#666;vertical-align:middle}
+.page-box .pg-jump a:hover{text-decoration:none;background-color:#ffc75a;color:#fff}
+
+
+/* retina */
+@media (min-resolution:1.25dppx),(-webkit-min-device-pixel-ratio:1.25),(min-device-pixel-ratio:1.25){
+    .daoju_list .info i,.daoju_list .buy span i,.daoju_list .coming_soon .info,.side_my .gold i,.col-side .pagin a{ background: url("../images/sprite_v2.png") no-repeat; background-size: 447px;}
+
+    .daoju_list .info i.state1{ background-position: 0px -61px;}
+    .daoju_list .info i.state2{ background-position: -66px -61px;}
+    .daoju_list .info i.state3{ background-position: -132px -61px;}
+    .daoju_list .info i.state4{ background-position: -198px -61px;}
+    .daoju_list .info i.state5{ background-position: -264px -61px;}
+    .daoju_list .coming_soon .info{ background-position: -149px -127px;}
+
+    .daoju_list .buy span i.icon_gold{ background-position: -132px -22px;}
+    .daoju_list .buy span i.icon_honey{ background-position: -154px -22px;}
+
+    .col-side .pagin .btn-left{ background-position: -198px -22px;}
+    .col-side .pagin .btn-right{ background-position: -208px -22px;}
+
+    .side_my .gold i{ background-position: -132px -22px;}
+}

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.flight.mapper.FlightDestMapper">
+  <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.flight.domain.FlightDest">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="aircode" jdbcType="VARCHAR" property="aircode" />
+    <result column="ishot" jdbcType="INTEGER" property="ishot" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from flight_dest
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.wolfcode.luowowo.flight.domain.FlightDest" useGeneratedKeys="true">
+    insert into flight_dest (name, aircode, ishot
+      )
+    values (#{name,jdbcType=VARCHAR}, #{aircode,jdbcType=VARCHAR}, #{ishot,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.wolfcode.luowowo.flight.domain.FlightDest">
+    update flight_dest
+    set name = #{name,jdbcType=VARCHAR},
+      aircode = #{aircode,jdbcType=VARCHAR},
+      ishot = #{ishot,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, name, aircode, ishot
+    from flight_dest
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, aircode, ishot
+    from flight_dest
+  </select>
+    <select id="listHotFlights" resultType="cn.wolfcode.luowowo.flight.domain.FlightDest">
+      select id, name, aircode, ishot
+      from flight_dest
+      where ishot=1
+    </select>
+  <select id="listFlightsByCodeA" resultType="cn.wolfcode.luowowo.flight.domain.FlightDest">
+    select id, name, aircode, ishot
+    from flight_dest
+    where airCode like 'A%'
+    or airCode like 'B%'
+    or airCode like 'C%'
+    or airCode like 'D%'
+    or airCode like 'E%'
+  </select>
+  <select id="listFlightsByCodeF" resultType="cn.wolfcode.luowowo.flight.domain.FlightDest">
+    select id, name, aircode, ishot
+    from flight_dest
+    where airCode like 'F%'
+          or airCode like 'G%'
+          or airCode like 'H%'
+          or airCode like 'J%'
+  </select>
+  <select id="listFlightsByCodeK" resultType="cn.wolfcode.luowowo.flight.domain.FlightDest">
+    select id, name, aircode, ishot
+    from flight_dest
+    where airCode like 'K%'
+          or airCode like 'L%'
+          or airCode like 'M%'
+          or airCode like 'N%'
+          or airCode like 'P%'
+  </select>
+  <select id="listFlightsByCodeQ" resultType="cn.wolfcode.luowowo.flight.domain.FlightDest">
+    select id, name, aircode, ishot
+    from flight_dest
+    where airCode like 'Q%'
+          or airCode like 'R%'
+          or airCode like 'S%'
+          or airCode like 'T%'
+          or airCode like 'W%'
+  </select>
+  <select id="listFlightsByCodeX" resultType="cn.wolfcode.luowowo.flight.domain.FlightDest">
+    select id, name, aircode, ishot
+    from flight_dest
+    where airCode like 'X%'
+          or airCode like 'Y%'
+          or airCode like 'Z%'
+  </select>
+</mapper>

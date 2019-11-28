@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.hotel.mapper.DestinationThemeMapper">
+  <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.hotel.domain.DestinationTheme">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="dest_ids" jdbcType="VARCHAR" property="dests" />
+</resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from hotel_destination_theme
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.wolfcode.luowowo.hotel.domain.DestinationTheme" useGeneratedKeys="true">
+    insert into hotel_destination_theme (name, dest_ids)
+    values (#{name,jdbcType=VARCHAR}, #{dest_ids,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.wolfcode.luowowo.hotel.domain.DestinationTheme">
+    update hotel_destination_theme
+    set name = #{name,jdbcType=VARCHAR},
+      dest_ids = #{dest_ids,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, name, dest_ids
+    from hotel_destination_theme
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, dest_ids
+    from hotel_destination_theme
+  </select>
+</mapper>

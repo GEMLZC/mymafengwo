@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.ViewTagMapper">
+  <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.ViewTag">
+    <id column="id" property="id" />
+    <result column="name" property="name" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey">
+    delete from view_tag
+    where id = #{id}
+  </delete>
+  <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+    insert into view_tag (name)
+    values (#{name})
+  </insert>
+  <update id="updateByPrimaryKey">
+    update view_tag
+    set name = #{name}
+    where id = #{id}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select id, name
+    from view_tag
+    where id = #{id}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name
+    from view_tag
+  </select>
+  <select id="selectByDestId" resultMap="BaseResultMap">
+    SELECT DISTINCT
+      t.id,
+      t.NAME
+    FROM
+      view_tag t left join view_tag_relation rel on t.id=rel.tag_id
+      LEFT JOIN view v on v.id=rel.view_id
+  </select>
+</mapper>

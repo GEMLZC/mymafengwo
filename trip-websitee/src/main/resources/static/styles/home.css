@@ -1,0 +1,22 @@
+.MAvaAction .MAvaBtn {
+    width: 30px;
+    display: inline-block;
+    margin-right: 5px;
+    line-height: 24px;
+    border:
+            #ffa800 1px solid;
+    border-radius: 3px;
+    vertical-align: middle;
+}
+.MAvaAction .MAvaEmail {
+    padding: 0 18px;
+    color:
+            #ff8a00;
+}
+.MAvaAction .MAvaAttention {
+    color:
+            #fff;
+}
+.MAvaAction .MAvaAttention .MAed, .MAvaAction .MAvaAttention .MAcancel {
+    display: none;
+}
